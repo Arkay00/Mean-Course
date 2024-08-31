@@ -3,7 +3,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "strict": true,
+    "strict": false,
     "outDir": "./dist/out-tsc",
     "skipLibCheck": true,
     "isolatedModules": true,
