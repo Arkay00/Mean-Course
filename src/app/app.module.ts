@@ -16,6 +16,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HeaderComponent } from './posts/header/header.component';
 import { PostListComponent } from './posts/post-list/post-list.component';
+// import { PostsService } from './posts/posts.service';
 
 @NgModule({
   declarations: [
@@ -36,8 +37,13 @@ import { PostListComponent } from './posts/post-list/post-list.component';
   ],
   providers: [
     provideClientHydration(),
-    provideAnimationsAsync()
+    provideAnimationsAsync(),
   ],
+  // providers: [
+  //   provideClientHydration(),
+  //   provideAnimationsAsync(),
+  //   PostsService
+  // ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
