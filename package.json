@@ -7,7 +7,9 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:mean-course01": "node dist/mean-course01/server/server.mjs"
+    "serve:ssr:mean-course01": "node dist/mean-course01/server/server.mjs",
+    "start:server":"nodemon server.js"
+
   },
   "private": true,
   "dependencies": {
@@ -41,6 +43,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "nodemon": "^3.1.4",
     "typescript": "~5.5.2"
   }
 }
