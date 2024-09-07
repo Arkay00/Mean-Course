@@ -8,8 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:mean-course01": "node dist/mean-course01/server/server.mjs",
-    "start:server":"nodemon server.js"
-
+    "start:server": "nodemon server.js"
   },
   "private": true,
   "dependencies": {
@@ -25,6 +24,7 @@
     "@angular/platform-server": "^18.2.0",
     "@angular/router": "^18.2.0",
     "@angular/ssr": "^18.2.1",
+    "body-parser": "^1.20.2",
     "express": "^4.19.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
