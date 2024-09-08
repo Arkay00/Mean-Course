@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
+// needs body-parser package
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -17,7 +18,7 @@ app.use((req, res, next)  => {
     next();
 });
 
-app.post('/app/posts', (req, res, next) => {
+app.post('/api/posts', (req, res, next) => {
     const post = req.body;
     console.log(post);
     res.status(201).json({
@@ -26,7 +27,7 @@ app.post('/app/posts', (req, res, next) => {
 });
 // app.get()
 
-app.use('/api/posts', (req, res, next) => {
+app.get('/api/posts', (req, res, next) => {
     const posts = [
         {
             id: '123445',
