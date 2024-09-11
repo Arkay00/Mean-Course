@@ -44,23 +44,35 @@ app.post('/api/posts', (req, res, next) => {
 // app.get()
 
 app.get('/api/posts', (req, res, next) => {
-    const posts = [
-        {
-            id: '123445',
-            title: 'First server post',
-            content: 'This comes from the server'
-        },
-        {
-            id: '1234456',
-            title: 'Second server post',
-            content: 'This comes from the server,too'
-        }
-    ];
+    // Post.find((err, documents) =>{};
+    Post.find()
+        .then(documents => {
+            // console.log(documents);
+            //unbedingt im Then-Block, da asynchroner call und der sonst ggf. noch nicht fertig ist.
+            res.status(200).json({
+                message: 'Posts send successfully', 
+                posts: documents
+            });
+        });
+        // .catch()
+
+    // const posts = [
+    //     {
+    //         id: '123445',
+    //         title: 'First server post',
+    //         content: 'This comes from the server'
+    //     },
+    //     {
+    //         id: '1234456',
+    //         title: 'Second server post',
+    //         content: 'This comes from the server,too'
+    //     }
+    // ];
     // return
-    res.status(200).json({
-        message: 'Posts send successfully', 
-        posts: posts
-    });
+    // res.status(200).json({
+    //     message: 'Posts send successfully', 
+    //     posts: posts
+    // });
 ;})
 
 module.exports = app;

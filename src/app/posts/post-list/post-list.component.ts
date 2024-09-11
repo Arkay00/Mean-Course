@@ -21,16 +21,18 @@ export class PostListComponent implements OnInit, OnDestroy {
   // constructor(postsService: PostsService){
   //   this.postsService = postsService;
   // }
-  constructor(public postsService: PostsService){}
+  constructor(public postsService: PostsService) {}
 
   ngOnInit() {
     // this.posts = this.postsService.getPosts();
-    this.postsService.getPosts();
+    //ich habe die Reihenfolge von subscribe und getPosts umgedreht, da ansonsten (im Gegensatz zum Kurs) die Initialisierung der Posts nicht funktioniert.
     this.postsSub = this.postsService.getPostUpdateListener()
-      .subscribe((posts: Post[]) => {
-        this.posts = posts
-      });  
+    .subscribe((posts: Post[]) => {
+      this.posts = posts;
+    }); 
+    this.postsService.getPosts();
   }
+
 
   ngOnDestroy() {
     this.postsSub.unsubscribe();
