@@ -75,4 +75,17 @@ app.get('/api/posts', (req, res, next) => {
     // });
 ;})
 
+app.delete('/api/posts/:id', (req, res, next) => {
+    const id = req.params.id;
+    Post.deleteOne({_id: id}).then(result => {
+        console.log(result);
+    });
+    // console.log(id);
+    res.status(200).json({
+        message: 'Post ' +  id + ' has been deleted'
+        // message: 'Post has been deleted'
+    });
+    // Post.delete()
+})
+
 module.exports = app;

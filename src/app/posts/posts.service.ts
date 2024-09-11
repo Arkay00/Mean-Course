@@ -17,18 +17,18 @@ export class PostsService{
             // .get<{message: string, posts: Post[]}>
                 .get<{message: string, posts: any}>
                 ('http://localhost:3000/api/posts')
-                //pipe accepts multiple operators within observable
-                // .pipe(map((postData) => {
-                //     return postData.posts.map((post) => {
-                //         return {
-                //             id: post._id,
-                //             title: post.title,
-                //             content: post.content
-                //         }
-                //     })
-                // }))
+                // pipe accepts multiple operators within observable
+                .pipe(map((postData) => {
+                    return postData.posts.map((post) => {
+                        return {
+                            id: post._id,
+                            title: post.title,
+                            content: post.content
+                        }
+                    })
+                }))
                 .subscribe(transformedPosts => {
-                this.posts = transformedPosts.posts;
+                this.posts = transformedPosts;
                 this.postsUpdated.next([...this.posts]);
             });
     }
@@ -48,5 +48,13 @@ export class PostsService{
             });
         // this.posts.push(post);
         // this.postsUpdated.next([...this.posts]);
+    }
+
+    deletePost(postId: string){
+        this.http.delete<{message: string}>('http://localhost:3000/api/posts/' + postId)
+            .subscribe((responseData) => {
+                console.log(responseData.message);
+                
+            });
     }
 }
