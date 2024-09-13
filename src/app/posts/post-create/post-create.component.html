@@ -1,6 +1,6 @@
 <!-- <textarea rows="6" [value]="newPost" #postInput></textarea> -->
 <mat-card>
-    <form (submit)="onAddPost(postForm)" #postForm="ngForm">
+    <form (submit)="onSavePost(postForm)" #postForm="ngForm">
         <mat-form-field>
             <!-- Bei Vorhandensein eines form fields kann TwoWay-Binding durch ngModel ersetze werden, s.u. -->
             <!-- <input 
@@ -10,7 +10,7 @@
             <input matInput 
                 type="text" 
                 name = "title"
-                ngModel
+                [ngModel] ="post.title"
                 required
                 minlength = "3"
                 placeholder = "Post Title"
@@ -25,7 +25,7 @@
             <textarea matInput 
                 rows="6"
                 name="content"
-                ngModel
+                [ngModel] ="post.content"
                 required
                 minlength = "2"
                 placeholder="Post Content"

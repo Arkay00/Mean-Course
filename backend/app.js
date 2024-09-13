@@ -29,6 +29,7 @@ app.use((req, res, next)  => {
     next();
 });
 
+//Achtung: Wenn in der Angular APP Routing verwende dann dürfen sich die Namen der Routings, zum Beispiel /api/posts nicht mit denen in der App überschneiden!
 app.post('/api/posts', (req, res, next) => {
     // const post = req.body;
     const post = new Post({
@@ -45,6 +46,18 @@ app.post('/api/posts', (req, res, next) => {
     console.log(post);
 });
 // app.get()
+
+app.put("/api/posts/:id", (req, res, next) => {
+    const post = new Post({
+        _id : req.body.id,
+        title: req.body.title,
+        content: req.body.connect
+    });
+    Post.updateOne({_id: req.params.id}, post).then(result => {
+        console.log(result);
+        res.status(200).json({message: 'Post has been updated.'});
+    });
+});
 
 app.get('/api/posts', (req, res, next) => {
     // Post.find((err, documents) =>{};

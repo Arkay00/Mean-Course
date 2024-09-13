@@ -3,6 +3,7 @@ import { Post } from './post.model'
 import { Subject } from 'rxjs'
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';//for mapping within observable
+import { response } from 'express';
 
 @Injectable({providedIn: 'root'})
 export class PostsService{
@@ -38,6 +39,10 @@ export class PostsService{
         return this.postsUpdated.asObservable();
     }
 
+    getPost(id: string){
+        return {...this.posts.find(post => post.id === id)};
+    }
+
     addPost(title: string, content: string){
         const post: Post = {id: null, title: title, content: content};
         this.http.post<{message: string, postId: string}>('http://localhost:3000/api/posts', post)
@@ -50,6 +55,14 @@ export class PostsService{
             });
         // this.posts.push(post);
         // this.postsUpdated.next([...this.posts]);
+    }
+
+    updatePost(postId: string, title: string, content: string){
+        const post: Post = {id: postId, title: title, content: content};
+        this.http.put<{message: string}>('http://localhost:3000/api/posts/' + postId, post)
+            .subscribe( (responseData) => {
+                console.log(responseData);
+            });
     }
 
     deletePost(postId: string){
