@@ -39,12 +39,13 @@ export class PostCreateComponent implements OnInit{
                 this.postId = paramMap.get('postId');
                 // this.post = this.postsService.getPost(this.postId);
                 this.postsService.getPost(this.postId).subscribe(postData => {
+                    console.log(postData);
                     this.post = {
-                        id: postData._id,
-                        title: postData.title,
-                        content: postData.content
+                        id: postData.post._id,
+                        title: postData.post.title,
+                        content: postData.post.content
                     }
-                    console.log('updatengOnInit');
+                    // console.log(this.postId);
                 });
                 }
             else {
