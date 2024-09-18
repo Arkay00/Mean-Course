@@ -7,10 +7,11 @@
                 matInput 
                 type="text" 
                 [(ngModel)]="enteredTitle"> -->
-            <input matInput 
+            <input 
+                matInput 
                 type="text" 
                 name = "title"
-                [ngModel] ="post.title"
+                [ngModel] ="post?.title"
                 required
                 minlength = "3"
                 placeholder = "Post Title"
@@ -22,10 +23,11 @@
             matInput 
             rows="6" 
             [(ngModel)]="enteredContent"></textarea> -->
-            <textarea matInput 
+            <textarea 
+                matInput 
                 rows="6"
                 name="content"
-                [ngModel] ="post.content"
+                [ngModel] ="post?.content"
                 required
                 minlength = "2"
                 placeholder="Post Content"

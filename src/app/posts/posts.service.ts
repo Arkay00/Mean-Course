@@ -39,8 +39,11 @@ export class PostsService{
         return this.postsUpdated.asObservable();
     }
 
-    getPost(id: string){
-        return {...this.posts.find(post => post.id === id)};
+    getPost(postId: string){
+        // return {...this.posts.find(post => post.id === id)};
+
+        //Achtung, in einer Subscription kann nur synchroner Code zurückgegeben werden! (asynchron gleich läuft irgenwann mit Antwort ein)
+        return this.http.get<{_id: string, title: string, content: string}>('http://localhost:3000/api/posts/' + postId);
     }
 
     addPost(title: string, content: string){
@@ -61,14 +64,19 @@ export class PostsService{
         const post: Post = {id: postId, title: title, content: content};
         this.http.put<{message: string}>('http://localhost:3000/api/posts/' + postId, post)
             .subscribe( (responseData) => {
-                console.log(responseData);
+                // console.log(responseData);
+                    const updatedPosts = [...this.posts];
+                    const oldPostIndex = updatedPosts.findIndex(p => p.id === post.id);
+                    updatedPosts[oldPostIndex] = post;
+                    this.posts = updatedPosts;
+                    this.postsUpdated.next([...this.posts]);
             });
     }
 
     deletePost(postId: string){
         this.http.delete<{message: string}>('http://localhost:3000/api/posts/' + postId)
             .subscribe((responseData) => {
-                console.log(responseData.message);
+                // console.log(responseData.message);
                 const updatedPosts = this.posts.filter(post => post.id !== postId);
                 this.posts = updatedPosts;
                 this.postsUpdated.next([...this.posts]);

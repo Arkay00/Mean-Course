@@ -47,16 +47,37 @@ app.post('/api/posts', (req, res, next) => {
 });
 // app.get()
 
-app.put("/api/posts/:id", (req, res, next) => {
+
+
+app.put('/api/posts/:id', (req, res, next) => {
     const post = new Post({
         _id : req.body.id,
         title: req.body.title,
-        content: req.body.connect
+        content: req.body.content
     });
     Post.updateOne({_id: req.params.id}, post).then(result => {
-        console.log(result);
+        // console.log(result);
         res.status(200).json({message: 'Post has been updated.'});
     });
+});
+
+app.get('/api/posts/:id', (req, res, next) => {
+    const postId = req.params.id;
+    Post.findById(postId)
+        .then(post => {
+            if(post) {
+                res.status(200).json({
+                    message: 'Post updated successfully',
+                    post: post
+                });
+                console.log(post);
+            }
+            else{
+                res.status(404).json({
+                    message: 'Post not found'
+                });
+            }
+        });
 });
 
 app.get('/api/posts', (req, res, next) => {

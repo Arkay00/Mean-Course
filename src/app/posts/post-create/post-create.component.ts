@@ -29,21 +29,34 @@ export class PostCreateComponent implements OnInit{
     // }
     constructor(public postsService: PostsService, public route: ActivatedRoute){}
 
+    // Subscribes die innerhalb dieser Angular-Methoden gemacht werden, müssen nicht gecancelt werden, da sie von Angular verwaltet werden.
     ngOnInit(){
+        console.log("onInit");
         this.route.paramMap.subscribe( (paramMap: ParamMap) => {
             if (paramMap.has('postId')){
                 this.mode = 'edit';
+                console.log(this.mode);
                 this.postId = paramMap.get('postId');
-                this.post = this.postsService.getPost(this.postId);
-            }
+                // this.post = this.postsService.getPost(this.postId);
+                this.postsService.getPost(this.postId).subscribe(postData => {
+                    this.post = {
+                        id: postData._id,
+                        title: postData.title,
+                        content: postData.content
+                    }
+                    console.log('updatengOnInit');
+                });
+                }
             else {
                 this.mode = 'create';
                 this.postId = null;
+                console.log(this.mode);
             }
         });
     }
 
     onSavePost(form: NgForm){
+        console.log(this.mode);
         if (form.invalid){
             return;
         }
@@ -52,6 +65,7 @@ export class PostCreateComponent implements OnInit{
         }
         else{
             this.postsService.updatePost(this.postId, form.value.title, form.value.content)
+            // console.log('update');
         }
         // const post: Post = {
         //     title: form.value.title,
@@ -59,6 +73,6 @@ export class PostCreateComponent implements OnInit{
         // }
         // this.postCreated.emit(post);
         
-        form.reset();
+        form.resetForm();
     }
 }
