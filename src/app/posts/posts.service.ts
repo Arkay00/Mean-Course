@@ -43,7 +43,8 @@ export class PostsService{
         // return {...this.posts.find(post => post.id === id)};
 
         //Achtung, in einer Subscription kann nur synchroner Code zurückgegeben werden! (asynchron gleich läuft irgenwann mit Antwort ein)
-        return this.http.get<{ post : { _id: string, title: string, content: string}}>('http://localhost:3000/api/posts/' + postId);
+        // return this.http.get<{ post : { _id: string, title: string, content: string}}>('http://localhost:3000/api/posts/' + postId);
+        return this.http.get<{post: {_id: string, title: string, content: string}}>('http://localhost:3000/api/posts/' + postId);
     }
 
     addPost(title: string, content: string){
