@@ -13,9 +13,11 @@ import { Post } from "../post.model";
 export class PostCreateComponent implements OnInit{
     enteredTitle = '';
     enteredContent = '';
+    post: Post;
+    isLoading = false;
     private mode = 'create';
     private postId: string;
-    post: Post;
+
     // @Output() postCreated = new EventEmitter<Post>();
     // newPost = 'No Content';
     // onAddPost(){
@@ -37,6 +39,9 @@ export class PostCreateComponent implements OnInit{
                 this.mode = 'edit';
                 // console.log(this.mode);
                 this.postId = paramMap.get('postId');
+                //hier Spinner
+                this.isLoading = true
+                //
                 // this.post = this.postsService.getPost(this.postId);
                 // this.postsService.getPost(this.postId).subscribe(postData => {
                 //     console.log(postData);
@@ -48,6 +53,8 @@ export class PostCreateComponent implements OnInit{
                 //     // console.log(this.postId);
                 // });
                 this.postsService.getPost(this.postId).subscribe((postData) => {
+                    //hier Spinner aufhören
+                    this.isLoading = false
                     this.post = {id: postData.post._id, title: postData.post.title, content: postData.post.content};
                 })
                 }
@@ -64,6 +71,7 @@ export class PostCreateComponent implements OnInit{
         if (form.invalid){
             return;
         }
+        this.isLoading = true;//muss nicht auf false gesetzt werden,d a wegnavigiere.
         if (this.mode === 'create'){
             this.postsService.addPost(form.value.title, form.value.content);
         }

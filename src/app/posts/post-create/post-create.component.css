@@ -9,3 +9,7 @@ textarea {
     width: 100%;
     /* color: white; */
 }
+
+mat-spinner {
+    margin:auto;
+}
