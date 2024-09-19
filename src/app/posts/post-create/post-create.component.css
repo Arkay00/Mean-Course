@@ -13,3 +13,7 @@ textarea {
 mat-spinner {
     margin:auto;
 }
+/* //versteckt den file picker */
+input[type="file"] {
+    visibility: hidden;
+}
