@@ -1,0 +1,13 @@
+:host{
+    display: block;
+    margin-top: 1rem;
+}
+
+.info-text{
+    text-align:center;
+    font-weight: 450;
+}
+
+mat-spinner {
+    margin: auto;
+}
