@@ -1,6 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from "@angular/core";
 // import { Post } from '../post.model';
-import { NgForm } from "@angular/forms"
+// import { NgForm } from "@angular/forms"
+import { FormControl, FormGroup, Validators } from "@angular/forms"
 import { PostsService } from "../posts.service";
 import { ActivatedRoute, ParamMap } from "@angular/router";
 import { Post } from "../post.model";
@@ -15,6 +16,8 @@ export class PostCreateComponent implements OnInit{
     enteredContent = '';
     post: Post;
     isLoading = false;
+    // Form alternativ zu ngModel mit ReactiveFormModel
+    form: FormGroup;
     private mode = 'create';
     private postId: string;
 
@@ -34,6 +37,17 @@ export class PostCreateComponent implements OnInit{
     // Subscribes die innerhalb dieser Angular-Methoden gemacht werden, müssen nicht gecancelt werden, da sie von Angular verwaltet werden.
     ngOnInit(){
         // console.log("onInit");
+        this.form = new FormGroup({
+            // herausfinden, wie steuere, ob die Validierung bei Änderung oder bei verlassen der Form stattfinden soll
+            'title': new FormControl(null, {
+                validators: [Validators.required, Validators.minLength(3)],
+                updateOn: 'change'
+            }),
+            'content': new FormControl(null, {
+                validators: [Validators.required, Validators.minLength(2)],
+                updateOn: 'change'
+            })
+        });
         this.route.paramMap.subscribe( (paramMap: ParamMap) => {
             if (paramMap.has('postId')){
                 this.mode = 'edit';
@@ -56,6 +70,11 @@ export class PostCreateComponent implements OnInit{
                     //hier Spinner aufhören
                     this.isLoading = false
                     this.post = {id: postData.post._id, title: postData.post.title, content: postData.post.content};
+                    // console.log(this.post);
+                    this.form.setValue({
+                        'title': this.post.title,
+                        'content': this.post.content
+                    });
                 })
                 }
             else {
@@ -66,17 +85,19 @@ export class PostCreateComponent implements OnInit{
         });
     }
 
-    onSavePost(form: NgForm){
-        console.log(this.mode);
-        if (form.invalid){
+    // onSavePost(form: NgForm){
+    onSavePost(){
+        // console.log(this.mode);
+        // if (form.invalid){
+        if(this.form.invalid){
             return;
         }
         this.isLoading = true;//muss nicht auf false gesetzt werden,d a wegnavigiere.
         if (this.mode === 'create'){
-            this.postsService.addPost(form.value.title, form.value.content);
+            this.postsService.addPost(this.form.value.title, this.form.value.content);
         }
         else{
-            this.postsService.updatePost(this.postId, form.value.title, form.value.content)
+            this.postsService.updatePost(this.postId, this.form.value.title, this.form.value.content)
             // console.log('update');
         }
         // const post: Post = {
@@ -85,6 +106,7 @@ export class PostCreateComponent implements OnInit{
         // }
         // this.postCreated.emit(post);
         
-        form.resetForm();
+        // form.resetForm();
+        this.form.reset();
     }
 }

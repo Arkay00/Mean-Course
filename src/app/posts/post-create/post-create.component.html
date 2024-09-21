@@ -1,14 +1,15 @@
 <!-- <textarea rows="6" [value]="newPost" #postInput></textarea> -->
 <mat-card>
     <mat-spinner *ngIf = "isLoading"></mat-spinner>
-    <form (submit)="onSavePost(postForm)" #postForm="ngForm" *ngIf="!isLoading">
+    <!-- <form (submit)="onSavePost(postForm)" #postForm="ngForm" *ngIf="!isLoading"> -->
+    <form [formGroup]="form" (submit)="onSavePost()" *ngIf="!isLoading">
         <mat-form-field>
             <!-- Bei Vorhandensein eines form fields kann TwoWay-Binding durch ngModel ersetze werden, s.u. -->
             <!-- <input 
                 matInput 
                 type="text" 
                 [(ngModel)]="enteredTitle"> -->
-            <input 
+            <!-- <input 
                 matInput 
                 type="text" 
                 name = "title"
@@ -16,8 +17,14 @@
                 required
                 minlength = "3"
                 placeholder = "Post Title"
-                #title="ngModel">
-                <mat-error *ngIf="title.invalid">Please enter a valid Post title</mat-error>
+                #title="ngModel"> -->
+            <input 
+                matInput 
+                type="text" 
+                formControlName = 'title'
+                placeholder = "Post Title">
+                <!-- <mat-error *ngIf="title.invalid">Please enter a valid Post title</mat-error> -->
+                <mat-error *ngIf="form.get('title').invalid">Please enter a valid Post title</mat-error>
         </mat-form-field>
         <div>
             <!-- default type ist submit, was aber zu felhlern führt (bei mir nicht, nur im Kurs..) -->
@@ -30,7 +37,7 @@
             matInput 
             rows="6" 
             [(ngModel)]="enteredContent"></textarea> -->
-            <textarea 
+            <!-- <textarea 
                 matInput 
                 rows="6"
                 name="content"
@@ -38,8 +45,14 @@
                 required
                 minlength = "2"
                 placeholder="Post Content"
-                #content="ngModel"></textarea>
-                <mat-error *ngIf="content.invalid">Please enter a Post content</mat-error>
+                #content="ngModel"></textarea> -->
+            <textarea 
+                matInput 
+                rows="6"
+                formControlName = 'content'
+                placeholder="Post Content"></textarea>
+                <!-- <mat-error *ngIf="content.invalid">Please enter a Post content</mat-error> -->
+                <mat-error *ngIf="form.get('content').invalid">Please enter a Post content</mat-error>
         </mat-form-field>
         <mat-card-actions>
             <!-- <button 
