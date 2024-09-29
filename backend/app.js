@@ -1,3 +1,4 @@
+const path = require("path");//allows to handle paths and also indepent of os
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -21,6 +22,9 @@ mongoose.connect("mongodb://readwrite:123456@localhost:27017/meancourse?retryWri
 //can only parse json or urlencoded data, not false
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
+//allow images folder to be accessible from the client and are then forwarded to the path on the server
+app.use("/images", express.static(path.join("backend/images")));
 
 // handles CORS error
 // Control witch methods may be send
