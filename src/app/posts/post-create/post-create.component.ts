@@ -83,13 +83,13 @@ export class PostCreateComponent implements OnInit {
             id: postData.post._id,
             title: postData.post.title,
             content: postData.post.content,
-            imagePath: null,
+            imagePath: postData.post.imagePath,
           };
           // console.log(this.post);
           this.form.setValue({
             title: this.post.title,
             content: this.post.content,
-            image: null,
+            image: this.post.imagePath,
           });
         });
       } else {
@@ -133,7 +133,8 @@ export class PostCreateComponent implements OnInit {
       this.postsService.updatePost(
         this.postId,
         this.form.value.title,
-        this.form.value.content
+        this.form.value.content,
+        this.form.value.image
       );
       // console.log('update');
     }
