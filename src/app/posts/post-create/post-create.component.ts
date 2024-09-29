@@ -83,6 +83,7 @@ export class PostCreateComponent implements OnInit {
             id: postData.post._id,
             title: postData.post.title,
             content: postData.post.content,
+            imagePath: null,
           };
           // console.log(this.post);
           this.form.setValue({
@@ -123,7 +124,11 @@ export class PostCreateComponent implements OnInit {
     }
     this.isLoading = true; //muss nicht auf false gesetzt werden,d a wegnavigiere.
     if (this.mode === 'create') {
-      this.postsService.addPost(this.form.value.title, this.form.value.content);
+      this.postsService.addPost(
+        this.form.value.title,
+        this.form.value.content,
+        this.form.value.image
+      );
     } else {
       this.postsService.updatePost(
         this.postId,

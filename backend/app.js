@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
+
 const postsRoutes = require("./routes/posts");
 
 // const Post = require('./models/post');
@@ -17,6 +18,7 @@ mongoose.connect("mongodb://readwrite:123456@localhost:27017/meancourse?retryWri
     })
 
 // needs body-parser package
+//can only parse json or urlencoded data, not false
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
