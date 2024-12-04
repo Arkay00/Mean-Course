@@ -1,12 +1,13 @@
-import { Component, Input, OnDestroy, OnInit   } from '@angular/core';
-import {Post} from '../post.model';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Post } from '../post.model';
 import { PostsService } from '../posts.service';
 import { Subscription } from 'rxjs';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-post-list',
   templateUrl: './post-list.component.html',
-  styleUrl: './post-list.component.css'
+  styleUrl: './post-list.component.css',
 })
 export class PostListComponent implements OnInit, OnDestroy {
   // posts = [
@@ -17,6 +18,9 @@ export class PostListComponent implements OnInit, OnDestroy {
   // @Input() posts: Post[] = [];
   posts: Post[] = [];
   isLoading = false;
+  totalPosts = 10;
+  postsPerPage = 2;
+  pageSizeOptions = [1, 2, 5, 10];
   private postsSub: Subscription;
   // postsService: PostsService;
   // constructor(postsService: PostsService){
@@ -24,20 +28,25 @@ export class PostListComponent implements OnInit, OnDestroy {
   // }
   constructor(public postsService: PostsService) {}
 
+  onChangedPage(pageData: PageEvent) {
+    console.log(pageData);
+  }
+
   ngOnInit() {
     // this.posts = this.postsService.getPosts();
     //ich habe die Reihenfolge von subscribe und getPosts umgedreht, da ansonsten (im Gegensatz zum Kurs) die Initialisierung der Posts nicht funktioniert.
     this.isLoading = true;
-    this.postsSub = this.postsService.getPostUpdateListener()
-    .subscribe((posts: Post[]) => {
-      this.isLoading = false;
-      this.posts = posts;
-      // console.log('Posts aktualisiert');
-    }); 
+    this.postsSub = this.postsService
+      .getPostUpdateListener()
+      .subscribe((posts: Post[]) => {
+        this.isLoading = false;
+        this.posts = posts;
+        // console.log('Posts aktualisiert');
+      });
     this.postsService.getPosts();
   }
 
-  onDelete(postId: string){
+  onDelete(postId: string) {
     this.postsService.deletePost(postId);
   }
 
