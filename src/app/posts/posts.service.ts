@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 @Injectable({ providedIn: 'root' })
 export class PostsService {
   private posts: Post[] = [];
-  private postsUpdated = new Subject<Post[]>();
+  private postsUpdated = new Subject<{ posts: Post[]; postCount: number }>();
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -19,25 +19,31 @@ export class PostsService {
     const QueryParams = `?pageSize=${postsPerPage}&page=${currentPage}`;
     this.http
       // .get<{message: string, posts: Post[]}>
-      .get<{ message: string; posts: any }>(
+      .get<{ message: string; posts: any; maxPosts: number }>(
         'http://localhost:3000/api/posts' + QueryParams
       )
       // pipe accepts multiple operators within observable
       .pipe(
         map((postData) => {
-          return postData.posts.map((post) => {
-            return {
-              id: post._id,
-              title: post.title,
-              content: post.content,
-              imagePath: post.imagePath,
-            };
-          });
+          return {
+            posts: postData.posts.map((post) => {
+              return {
+                id: post._id,
+                title: post.title,
+                content: post.content,
+                imagePath: post.imagePath,
+              };
+            }),
+            maxPosts: postData.maxPosts,
+          };
         })
       )
-      .subscribe((transformedPosts) => {
-        this.posts = transformedPosts;
-        this.postsUpdated.next([...this.posts]);
+      .subscribe((transformedPostData) => {
+        this.posts = transformedPostData.posts;
+        this.postsUpdated.next({
+          posts: [...this.posts],
+          postCount: transformedPostData.maxPosts,
+        });
       });
   }
 
@@ -70,20 +76,20 @@ export class PostsService {
         postData
       )
       .subscribe((responseData) => {
-        const post: Post = {
-          //   id: responseData.postId,
-          //   title: title,
-          //   content: content,
-          id: responseData.post.id,
-          title: responseData.post.title,
-          content: responseData.post.content,
-          imagePath: responseData.post.imagePath,
-        };
-        // console.log(responseData.message);
-        // const id = responseData.postId;
-        // post.id = id;
-        this.posts.push(post);
-        this.postsUpdated.next([...this.posts]);
+        // const post: Post = {
+        //   //   id: responseData.postId,
+        //   //   title: title,
+        //   //   content: content,
+        //   id: responseData.post.id,
+        //   title: responseData.post.title,
+        //   content: responseData.post.content,
+        //   imagePath: responseData.post.imagePath,
+        // };
+        // // console.log(responseData.message);
+        // // const id = responseData.postId;
+        // // post.id = id;
+        // this.posts.push(post);
+        // this.postsUpdated.next([...this.posts]);
         this.router.navigate(['/']);
       });
     // this.posts.push(post);
@@ -124,29 +130,30 @@ export class PostsService {
       )
       .subscribe((responseData) => {
         // console.log(responseData);
-        const updatedPosts = [...this.posts];
-        const oldPostIndex = updatedPosts.findIndex((p) => p.id === postId);
-        const post: Post = {
-          id: postId,
-          title: title,
-          content: content,
-          imagePath: '', //responseData.imagePath
-        };
-        updatedPosts[oldPostIndex] = post;
-        this.posts = updatedPosts;
-        this.postsUpdated.next([...this.posts]);
+        // const updatedPosts = [...this.posts];
+        // const oldPostIndex = updatedPosts.findIndex((p) => p.id === postId);
+        // const post: Post = {
+        //   id: postId,
+        //   title: title,
+        //   content: content,
+        //   imagePath: '', //responseData.imagePath
+        // };
+        // updatedPosts[oldPostIndex] = post;
+        // this.posts = updatedPosts;
+        // this.postsUpdated.next([...this.posts]);
         this.router.navigate(['/']);
       });
   }
 
   deletePost(postId: string) {
-    this.http
-      .delete<{ message: string }>('http://localhost:3000/api/posts/' + postId)
-      .subscribe((responseData) => {
-        // console.log(responseData.message);
-        const updatedPosts = this.posts.filter((post) => post.id !== postId);
-        this.posts = updatedPosts;
-        this.postsUpdated.next([...this.posts]);
-      });
+    return this.http.delete<{ message: string }>(
+      'http://localhost:3000/api/posts/' + postId
+    );
+    // .subscribe((responseData) => {
+    //   // console.log(responseData.message);
+    //   const updatedPosts = this.posts.filter((post) => post.id !== postId);
+    //   this.posts = updatedPosts;
+    //   this.postsUpdated.next([...this.posts]);
+    // });
   }
 }

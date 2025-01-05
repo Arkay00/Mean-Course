@@ -97,6 +97,7 @@ router.get('', (req, res, next) => {
     const pageSize = +req.query.pageSize;
     const currentPage = +req.query.page;
     const postQuery = Post.find();
+    let fetechedPosts;
     // console.log(pageSize);
     if (pageSize && currentPage){
         postQuery  
@@ -106,13 +107,23 @@ router.get('', (req, res, next) => {
     }
     postQuery
         .then(documents => {
+            fetechedPosts = documents;
+            return Post.countDocuments();
             //unbedingt im Then-Block, da asynchroner call und der sonst ggf. noch nicht fertig ist.
-            res.status(200).json({
+        //     res.status(200).json({
+        //         message: 'Posts send successfully', 
+        //         posts: documents
+        //     });
+        // });
+        ;})
+        .then( count => {
+                res.status(200).json({
                 message: 'Posts send successfully', 
-                posts: documents
-            });
-        });
-;})
+                posts: fetechedPosts,
+                maxPosts: count
+            }); 
+    });
+});
 
 router.get("/:id", (req, res, next) => {
     Post.findById(req.params.id).then(post => {
