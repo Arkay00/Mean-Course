@@ -94,7 +94,17 @@ router.get('/:id', (req, res, next) => {
 });
 
 router.get('', (req, res, next) => {
-    Post.find()
+    const pageSize = +req.query.pageSize;
+    const currentPage = +req.query.page;
+    const postQuery = Post.find();
+    // console.log(pageSize);
+    if (pageSize && currentPage){
+        postQuery  
+            //könnte ineffizient sein bei sehr großen Datenbanken, da dennoch die gesamte DB durchsucht wird.
+            .skip(pageSize * (currentPage -1))
+            .limit(pageSize);
+    }
+    postQuery
         .then(documents => {
             //unbedingt im Then-Block, da asynchroner call und der sonst ggf. noch nicht fertig ist.
             res.status(200).json({

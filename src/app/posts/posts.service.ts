@@ -13,11 +13,15 @@ export class PostsService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  getPosts() {
+  getPosts(postsPerPage: number, currentPage: number) {
     // return [...this.posts];
+    //`` to dynamically add to a String
+    const QueryParams = `?pageSize=${postsPerPage}&page=${currentPage}`;
     this.http
       // .get<{message: string, posts: Post[]}>
-      .get<{ message: string; posts: any }>('http://localhost:3000/api/posts')
+      .get<{ message: string; posts: any }>(
+        'http://localhost:3000/api/posts' + QueryParams
+      )
       // pipe accepts multiple operators within observable
       .pipe(
         map((postData) => {
